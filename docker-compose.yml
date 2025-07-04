@@ -1,0 +1,35 @@
+services:
+  database:
+    image: mysql:5.7
+    container_name: database
+    environment:
+      MYSQL_ROOT_PASSWORD: kali
+      MYSQL_DATABASE: reservation
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - victory
+
+  flask_app:
+    build: .
+    container_name: victory
+    image: bakhtawar375/victory:latest
+    environment:
+      MYSQL_HOST: database
+      MYSQL_USER: root
+      MYSQL_PASSWORD: kali
+      MYSQL_DATABASE: reservation
+    ports:
+      - "80:80"
+    networks:
+      - victory
+    depends_on:
+      - database
+
+volumes:
+  mysqldata:
+
+networks:
+  victory:
